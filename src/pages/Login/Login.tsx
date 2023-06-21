@@ -28,6 +28,7 @@ export default function Login() {
               </div>
               <div className='mt-3'>
                 <input
+                  autoComplete='on'
                   type='password'
                   name='password'
                   className='w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm'
