@@ -26,7 +26,7 @@ export default function Register() {
   const rules = getRules(getValues)
   return (
     <div className='bg-orange'>
-      <div className='mx-auto max-w-7xl px-4'>
+      <div className='container'>
         <div className='grid-cols grid py-12 lg:grid-cols-5 lg:py-32 lg:pr-10'>
           <div className='lg:col-span-2 lg:col-start-4'>
             <form onSubmit={onSubmit} className='rounded bg-white p-10 shadow-sm' noValidate>
