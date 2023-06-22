@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 export default function RegisterHeader() {
   return (
     <header className='py-5'>
-      <div className='mx-auto max-w-7xl px-4'>
+      <div className='containers'>
         <nav className='flex items-end'>
           <Link to='/'>
             <svg viewBox='0 0 192 65' className='h-8 fill-orange lg:h-11'>
@@ -12,7 +12,7 @@ export default function RegisterHeader() {
               </g>
             </svg>
           </Link>
-          <div className="ml-5 text-xl lg:text-2xl">Đăng kí</div>
+          <div className='ml-5 text-xl lg:text-2xl'>Đăng kí</div>
         </nav>
       </div>
     </header>
