@@ -5,11 +5,10 @@ import { Link } from 'react-router-dom'
 import { login } from 'src/apis/auth.api'
 import Input from 'src/components/Input'
 import { ResponseApi } from 'src/types/utils.type'
-import { schema, Schema } from 'src/utils/rule'
+import { Schema, loginSchema } from 'src/utils/rule'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 
 type FormData = Omit<Schema, 'confirm_password'>
-const loginSchema = schema.omit(['confirm_password'])
 export default function Login() {
   const {
     register,
@@ -20,7 +19,7 @@ export default function Login() {
     resolver: yupResolver(loginSchema)
   })
   const loginMutation = useMutation({
-    mutationFn: (body: Omit<FormData, 'confirm_password'>) => login(body)
+    mutationFn: (body: FormData) => login(body)
   })
   const onSubmit = handleSubmit((data) => {
     loginMutation.mutate(data, {
