@@ -1,11 +1,25 @@
 import { Link } from 'react-router-dom'
-
+import { useState } from 'react'
+import { useFloating } from '@floating-ui/react'
 export default function Header() {
+  const [open, setOpen] = useState(false)
+  const { refs, context } = useFloating({ open, onOpenChange: setOpen })
+  const showPopover = () => {
+    setOpen(true)
+  }
+  const hidePopover = () => {
+    setOpen(false)
+  }
   return (
     <div className='bg-[linear-gradient(-180deg,#f53d2d,#f63)] pb-5 pt-2 text-white'>
       <div className='container'>
         <div className='flex justify-end'>
-          <div className='flex cursor-pointer items-center py-1 hover:text-gray-300'>
+          <div
+            className='flex cursor-pointer items-center py-1 hover:text-gray-300'
+            ref={refs.setReference}
+            onMouseEnter={showPopover}
+            onMouseLeave={hidePopover}
+          >
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
