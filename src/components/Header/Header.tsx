@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
-import { useFloating } from '@floating-ui/react'
+import { FloatingPortal, useFloating } from '@floating-ui/react'
 export default function Header() {
   const [open, setOpen] = useState(false)
-  const { refs, context } = useFloating({ open, onOpenChange: setOpen })
+  const { x, y, refs, strategy } = useFloating()
   const showPopover = () => {
     setOpen(true)
   }
@@ -50,6 +50,26 @@ export default function Header() {
               />
             </svg>
           </div>
+          <FloatingPortal>
+            {open && (
+              <div
+                ref={refs.setFloating}
+                style={{
+                  position: strategy,
+                  top: y ?? 0,
+                  left: x ?? 0,
+                  width: 'max-content'
+                }}
+              >
+                <div className='relative rounded-sm border border-gray-200 bg-white shadow-md'>
+                  <div className='flex flex-col px-3 py-2'>
+                    <button className='px-3 py-2 hover:text-orange'>Tiếng Việt</button>
+                    <button className='px-3 py-2 hover:text-orange'>English</button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </FloatingPortal>
           <div className='ml-6 flex cursor-pointer items-center py-1 hover:text-gray-300'>
             <div className='mr-2 h-6 w-6 flex-shrink-0'>
               <img
