@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useRef, useState } from 'react'
 import { FloatingPortal, useFloating, arrow, shift, offset } from '@floating-ui/react'
+import { motion, AnimatePresence } from 'framer-motion'
 export default function Header() {
   const [open, setOpen] = useState(false)
   const arrowRef = useRef<HTMLElement>(null)
@@ -58,33 +59,41 @@ export default function Header() {
                 d='M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5'
               />
             </svg>
-          </div>
-          <FloatingPortal>
-            {open && (
-              <div
-                ref={refs.setFloating}
-                style={{
-                  position: strategy,
-                  top: y ?? 0,
-                  left: x ?? 0,
-                  width: 'max-content'
-                }}
-              >
-                <span
-                  ref={arrowRef}
-                  className='absolute z-10 -translate-y-[95%] border-[11px]
+            <FloatingPortal>
+              <AnimatePresence>
+                {open && (
+                  <motion.div
+                    ref={refs.setFloating}
+                    style={{
+                      position: strategy,
+                      top: y ?? 0,
+                      left: x ?? 0,
+                      width: 'max-content',
+                      transformOrigin: `${middlewareData.arrow?.x}px top`
+                    }}
+                    initial={{ opacity: 0, transform: 'scale(0)' }}
+                    animate={{ opacity: 1, transform: 'scale(1)' }}
+                    exit={{ opacity: 0, transform: 'sscale(0)' }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <span
+                      ref={arrowRef}
+                      className='absolute z-10 -translate-y-[95%] border-[11px]
                   border-x-transparent border-b-white border-t-transparent'
-                  style={{ left: middlewareData.arrow?.x, top: middlewareData.arrow?.y }}
-                ></span>
-                <div className='relative rounded-sm border border-gray-200 bg-white shadow-md'>
-                  <div className='flex flex-col px-3 py-2'>
-                    <button className='px-3 py-2 hover:text-orange'>Tiếng Việt</button>
-                    <button className='px-3 py-2 hover:text-orange'>English</button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </FloatingPortal>
+                      style={{ left: middlewareData.arrow?.x, top: middlewareData.arrow?.y }}
+                    ></span>
+                    <div className='relative rounded-sm border border-gray-200 bg-white shadow-md'>
+                      <div className='flex flex-col px-3 py-2'>
+                        <button className='px-3 py-2 hover:text-orange'>Tiếng Việt</button>
+                        <button className='px-3 py-2 hover:text-orange'>English</button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </FloatingPortal>
+          </div>
+
           <div className='ml-6 flex cursor-pointer items-center py-1 hover:text-gray-300'>
             <div className='mr-2 h-6 w-6 flex-shrink-0'>
               <img
