@@ -51,7 +51,7 @@ export default function Header() {
             renderPopover={
               <div className='rounded-sm border border-gray-200 shadow-md'>
                 <Link
-                  to='/'
+                  to='/profile'
                   className='block w-full bg-white px-3 py-2 text-left hover:bg-slate-100 hover:text-cyan-500'
                 >
                   Tài khoản của tôi
@@ -173,7 +173,7 @@ export default function Header() {
                     </div>
                     <div className='mt-6 flex items-center justify-between'>
                       <div className='text-xs capitalize'>Thêm vào giỏ hàng</div>
-                      <button className='capitialize rounded-sm bg-orange py-2 text-white hover:bg-opacity-90'>
+                      <button className='capitialize rounded-sm bg-orange p-2 text-white hover:bg-opacity-90'>
                         Xem giỏ hàng
                       </button>
                     </div>
