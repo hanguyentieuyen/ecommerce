@@ -33,6 +33,7 @@ class Http {
           this.accessToken = (response.data as AuthResponse).data?.access_token
           saveAccessTokenToLS(this.accessToken)
         } else if (url === 'logout') {
+          this.accessToken = ''
           clearAccessTokenLS()
         }
         return response
