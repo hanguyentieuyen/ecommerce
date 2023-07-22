@@ -21,7 +21,7 @@ export default function Header() {
       <div className='container'>
         <div className='flex justify-end'>
           <Popover
-            className='flex cursor-pointer items-center py-1 hover:text-gray-300'
+            className='flex cursor-pointer items-center py-1 hover:text-white/70'
             renderPopover={
               <div className='relative rounded-sm border border-gray-200 bg-white shadow-md'>
                 <div className='flex flex-col px-3 py-2'>
@@ -63,7 +63,7 @@ export default function Header() {
           </Popover>
           {isAuthenticated && (
             <Popover
-              className='ml-6 flex cursor-pointer items-center py-1 hover:text-gray-300'
+              className='ml-6 flex cursor-pointer items-center py-1 hover:text-white/70'
               renderPopover={
                 <div className='rounded-sm border border-gray-200 shadow-md'>
                   <Link
@@ -99,11 +99,11 @@ export default function Header() {
           )}
           {!isAuthenticated && (
             <div className='flex items-center'>
-              <Link to={path.register} className='hover: text-white,70 mx-3 capitalize'>
+              <Link to={path.register} className='hover: mx-3 capitalize text-white/70'>
                 Đăng kí
               </Link>
               <div className='h-4 border-r-[1px] border-r-white/40'></div>
-              <Link to={path.login} className='hover: text-white,70 mx-3 capitalize'>
+              <Link to={path.login} className='mx-3 capitalize hover:text-white/70'>
                 Đăng nhập
               </Link>
             </div>
