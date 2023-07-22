@@ -6,11 +6,12 @@ import { useMutation } from '@tanstack/react-query'
 import { logout } from 'src/apis/auth.api'
 import path from 'src/constanst/path'
 export default function Header() {
-  const { setIsAuthenticated, isAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, isAuthenticated, profile, setProfile } = useContext(AppContext)
   const logoutMutation = useMutation({
     mutationFn: logout,
     onSuccess: () => {
       setIsAuthenticated(false)
+      setProfile(null)
     }
   })
   const handleLogout = () => {
@@ -94,7 +95,7 @@ export default function Header() {
                   className='w-full rounded-full object-cover'
                 />
               </div>
-              <div>Hayen</div>
+              <div>{profile?.email}</div>
             </Popover>
           )}
           {!isAuthenticated && (
