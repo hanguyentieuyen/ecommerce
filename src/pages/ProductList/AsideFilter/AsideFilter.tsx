@@ -1,5 +1,7 @@
 import path from 'src/constanst/path'
 import { Link } from 'react-router-dom'
+import Input from 'src/components/Input'
+import Button from 'src/components/Button'
 
 export default function AsideFilter() {
   return (
@@ -56,6 +58,33 @@ export default function AsideFilter() {
           </svg>
           Bộ lọc tìm kiếm
         </Link>
+        <div className='my-4 h-[1px] bg-gray-300' />
+        <div className='my-5'>
+          <div>Khoản giá</div>
+          <form className='mt-2'>
+            <div className='flex items-start'>
+              <Input
+                type='text'
+                className='grow'
+                name='from'
+                placehoder='Từ'
+                classNameInput='p-1 w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm'
+              />
+              <div className='mx-2 mt-2 shrink-0'>-</div>
+              <Input
+                type='text'
+                className='grow'
+                name='to'
+                placehoder='Đến'
+                classNameInput='p-1 w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm'
+              />
+            </div>
+            <Button className='hover:bg-orange:80 flex w-full items-center justify-center bg-orange p-2 text-sm uppercase text-white'>
+              Áp dụng
+            </Button>
+          </form>
+        </div>
+        <div className='my-4 h-[1px] bg-gray-300' />
       </div>
     </div>
   )
