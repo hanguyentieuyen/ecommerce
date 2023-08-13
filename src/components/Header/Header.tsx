@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import { useMutation } from '@tanstack/react-query'
 import authApi from 'src/apis/auth.api'
-import path from 'src/constanst/path'
+import path from 'src/constant/path'
 export default function Header() {
   const { setIsAuthenticated, isAuthenticated, profile, setProfile } = useContext(AppContext)
   const logoutMutation = useMutation({

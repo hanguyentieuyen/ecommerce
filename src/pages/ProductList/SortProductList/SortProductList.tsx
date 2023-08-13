@@ -1,9 +1,9 @@
-import { sortBy, order as orderConstant } from 'src/constanst/product'
+import { sortBy, order as orderConstant } from 'src/constant/product'
 import { QueryConfig } from '../ProductList'
 import { ProductListConfig } from 'src/types/product.type'
 import classNames from 'classnames'
 import { Link, createSearchParams, useNavigate } from 'react-router-dom'
-import path from 'src/constanst/path'
+import path from 'src/constant/path'
 import { omit } from 'lodash'
 interface Props {
   queryConfig: QueryConfig
@@ -35,6 +35,7 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
       pathname: path.home,
       search: createSearchParams({
         ...queryConfig,
+        sort_by: sortBy.price,
         order: orderValue.toString()
       }).toString()
     })
