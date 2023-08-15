@@ -6,6 +6,8 @@ import { Category } from 'src/types/category.type'
 import classNames from 'classnames'
 import InputNumber from 'src/components/InputNumber'
 import { useForm, Controller } from 'react-hook-form'
+import { schema } from 'src/utils/rule'
+import { yupResolver } from '@hookform/resolvers/yup'
 interface Props {
   queryConfig: QueryConfig
   categories: Category[]
@@ -14,16 +16,22 @@ type FormData = {
   price_min: string
   price_max: string
 }
+const priceSchema = schema.pick(['price_min', 'price_max'])
+console.log(priceSchema)
 export default function AsideFilter({ queryConfig, categories }: Props) {
   const { category } = queryConfig
-  const {control, handleSubmit, watch} = useForm<FormData>({
+  const { control, handleSubmit, watch, formState: { errors } } = useForm<FormData>({
     defaultValues: {
       price_min: '',
       price_max: ''
-  } 
+    },
+    resolver: yupResolver(priceSchema.fields)
   })
   const valueForm = watch()
-  console.log(valueForm)
+  const onSubmit = handleSubmit((data) => {
+    console.log(data)
+  })
+  console.log(errors)
   return (
     <div className='py-4'>
       <Link
@@ -99,12 +107,12 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
       <div className='my-4 h-[1px] bg-gray-300' />
       <div className='my-5'>
         <div>Khoản giá</div>
-        <form className='mt-2'>
+        <form className='mt-2' onSubmit={onSubmit}>
           <div className='flex items-start'>
             <Controller
               control={control}
-              name= 'price_min'
-              render= {({field}) => {
+              name='price_min'
+              render={({ field }) => {
                 return (
                   <InputNumber
                     type='text'
@@ -118,12 +126,12 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                 )
               }}
             />
-            
+
             <div className='mx-2 mt-2 shrink-0'>-</div>
             <Controller
               control={control}
-              name= 'price_max'
-              render= {({field}) => {
+              name='price_max'
+              render={({ field }) => {
                 return (
                   <InputNumber
                     type='text'

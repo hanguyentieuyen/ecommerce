@@ -1,10 +1,7 @@
 import classNames from 'classnames'
-<<<<<<< Updated upstream
 import { Link, createSearchParams } from 'react-router-dom'
 import path from 'src/constant/path'
 import { QueryConfig } from 'src/pages/ProductList/ProductList'
-=======
->>>>>>> Stashed changes
 
 interface Props {
   queryConfig: QueryConfig
@@ -20,11 +17,7 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
       if (!dotBefore) {
         dotBefore = true
         return (
-<<<<<<< Updated upstream
           <span key={index} className='mx-2 cursor-pointer rounded border bg-white px-3 py-2 shadow-sm'>
-=======
-          <button key={index} className='mx-2 cursor-pointer rounded border bg-white px-3 py-2 shadow-sm'>
->>>>>>> Stashed changes
             ...
           </span>
         )
@@ -35,11 +28,7 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
       if (!dotAfter) {
         dotAfter = true
         return (
-<<<<<<< Updated upstream
           <span key={index} className='mx-2 cursor-pointer rounded border bg-white px-3 py-2 shadow-sm'>
-=======
-          <button key={index} className='mx-2 cursor-pointer rounded border bg-white px-3 py-2 shadow-sm'>
->>>>>>> Stashed changes
             ...
           </span>
         )
@@ -62,7 +51,6 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
           return renderDotBefore(index)
         }
         return (
-<<<<<<< Updated upstream
           <Link
             to={{
               pathname: path.home,
@@ -71,18 +59,11 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
                 page: pageNumber.toString()
               }).toString()
             }}
-=======
-          <button
->>>>>>> Stashed changes
             key={index}
             className={classNames('mx-2 cursor-pointer rounded border bg-white px-3 py-2 shadow-sm', {
               'border-cyan-500': pageNumber === page,
               'border-transparent': pageNumber !== page
             })}
-<<<<<<< Updated upstream
-=======
-            onClick={() => setPage(pageNumber)}
->>>>>>> Stashed changes
           >
             {pageNumber}
           </Link>
@@ -91,7 +72,6 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
   }
   return (
     <div className='mt-6 flex flex-wrap justify-center'>
-<<<<<<< Updated upstream
       {page === 1 ? (
         <span className='rouned cursor-not-allowed border bg-white/60 px-3 py-2'>Prev</span>
       ) : (
@@ -126,11 +106,6 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
           Next
         </Link>
       )}
-=======
-      <button className='mx-2 cursor-pointer rounded border bg-white px-3 py-2 shadow-sm'>Prev</button>
-      {renderPagination()}
-      <button className='mx-2 cursor-pointer rounded border bg-white px-3 py-2 shadow-sm'>Next</button>
->>>>>>> Stashed changes
     </div>
   )
 }
