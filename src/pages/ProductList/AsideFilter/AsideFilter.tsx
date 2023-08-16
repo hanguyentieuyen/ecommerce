@@ -1,37 +1,49 @@
 import path from 'src/constant/path'
-import { Link, createSearchParams } from 'react-router-dom'
+import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
 import { QueryConfig } from '../ProductList'
 import { Category } from 'src/types/category.type'
 import classNames from 'classnames'
 import InputNumber from 'src/components/InputNumber'
 import { useForm, Controller } from 'react-hook-form'
-import { schema } from 'src/utils/rule'
+import { Schema, schema } from 'src/utils/rule'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { NoUndefinedField } from 'src/types/utils.type'
+import { ObjectSchema } from 'yup'
 interface Props {
   queryConfig: QueryConfig
   categories: Category[]
 }
-type FormData = {
-  price_min: string
-  price_max: string
-}
+type FormData = NoUndefinedField<Pick<Schema, 'price_min' | 'price_max'>>
 const priceSchema = schema.pick(['price_min', 'price_max'])
-console.log(priceSchema)
 export default function AsideFilter({ queryConfig, categories }: Props) {
   const { category } = queryConfig
-  const { control, handleSubmit, watch, formState: { errors } } = useForm<FormData>({
+  const {
+    control,
+    handleSubmit,
+    watch,
+    trigger,
+    formState: { errors }
+  } = useForm<FormData>({
     defaultValues: {
       price_min: '',
       price_max: ''
     },
-    resolver: yupResolver(priceSchema.fields)
+    resolver: yupResolver<FormData>(priceSchema as ObjectSchema<FormData>),
+    shouldFocusError: false
   })
-  const valueForm = watch()
+  const navigate = useNavigate()
+
   const onSubmit = handleSubmit((data) => {
-    console.log(data)
+    navigate({
+      pathname: path.home,
+      search: createSearchParams({
+        ...queryConfig,
+        price_max: data.price_max,
+        price_min: data.price_min
+      }).toString()
+    })
   })
-  console.log(errors)
   return (
     <div className='py-4'>
       <Link
@@ -118,10 +130,15 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                     type='text'
                     className='grow'
                     name='from'
-                    placehoder='Từ'
+                    placeholder='Từ'
+                    classNameError='hidden'
                     classNameInput='p-1 w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm'
-                    onChange={field.onChange}
+                    onChange={(event) => {
+                      field.onChange(event)
+                      trigger('price_max')
+                    }}
                     value={field.value}
+                    ref={field.ref}
                   />
                 )
               }}
@@ -137,15 +154,21 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                     type='text'
                     className='grow'
                     name='to'
-                    placehoder='Đến'
+                    placeholder='Đến'
+                    classNameError='hidden'
                     classNameInput='p-1 w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm'
-                    onChange={field.onChange}
+                    onChange={(event) => {
+                      field.onChange(event)
+                      trigger('price_max')
+                    }}
                     value={field.value}
+                    ref={field.ref}
                   />
                 )
               }}
             />
           </div>
+          <div className='mt-1 min-h-[1.25rem] text-center text-sm text-red-600'>{errors.price_min?.message}</div>
           <Button className='hover:bg-orange:80 flex w-full items-center justify-center bg-orange p-2 text-sm uppercase text-white'>
             Áp dụng
           </Button>

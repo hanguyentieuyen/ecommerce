@@ -1,24 +1,22 @@
-import { InputHTMLAttributes } from 'react'
-import type { RegisterOptions, UseFormRegister } from 'react-hook-form'
+import { InputHTMLAttributes, forwardRef } from 'react'
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string
   classNameInput?: string
   classNameError?: string
-  placehoder?: string
-  register?: UseFormRegister<any>
-  rules?: RegisterOptions
 }
-
-export default function InputNumber({
-  errorMessage,
-  className,
-  name,
-  classNameError = 'mt-1 min-h-[1.25rem] text-sm text-red-600',
-  classNameInput = 'w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm',
-  onChange,
-  ...rest
-}: Props) {
+const InputNumber = forwardRef<HTMLInputElement, Props>(function InputNumberInner(
+  {
+    errorMessage,
+    className,
+    name,
+    classNameError = 'mt-1 min-h-[1.25rem] text-sm text-red-600',
+    classNameInput = 'w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm',
+    onChange,
+    ...rest
+  },
+  ref
+) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     if (onChange && (/^\d+$/.test(value) || value === '')) {
@@ -27,8 +25,9 @@ export default function InputNumber({
   }
   return (
     <div className={className}>
-      <input className={classNameInput} onChange={handleChange} {...rest} />
+      <input className={classNameInput} onChange={handleChange} {...rest} ref={ref} />
       <div className={classNameError}>{errorMessage}</div>
     </div>
   )
-}
+})
+export default InputNumber

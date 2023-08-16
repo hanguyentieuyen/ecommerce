@@ -53,7 +53,13 @@ export const getRules = (getValues?: UseFormGetValues<any>): Rules => ({
         : undefined
   }
 })
-
+function testPriceMinMax(this: yup.TestContext<yup.AnyObject>) {
+  const { price_max, price_min } = this.parent
+  if (price_min !== '' && price_max !== '') {
+    return Number(price_max) >= Number(price_min)
+  }
+  return price_max !== '' || price_min !== ''
+}
 export const schema = yup.object({
   email: yup
     .string()
@@ -72,35 +78,16 @@ export const schema = yup.object({
     .min(6, 'Độ dài 6 - 160 ký tự')
     .max(160, 'Độ dài từ 6 - 160 ký tự')
     .oneOf([yup.ref('password')], 'Nhập lại password không khớp'),
-  price_min: yup
-    .string()
-    .test({
-      name: 'price-not-allowed',
-      message: 'Giá không phù hợp',
-      test: function(value) {
-        const price_min = value
-        const {price_max} = this.parent as {price_max: string, price_min: string}
-        if(price_min !== '' && price_max !== '') {
-          return Number(price_max) >= Number(price_min)
-        }
-        return price_max !== '' || price_min !== ''
-      }
-    }),
-    price_max: yup
-    .string()
-    .test({
-      name: 'price-not-allowed',
-      message: 'Giá không phù hợp',
-      test: function(value) {
-        const price_max = value
-        const {price_min} = this.parent as {price_max: string, price_min: string}
-        if(price_min !== '' && price_max !== '') {
-          return Number(price_max) >= Number(price_min)
-        }
-        return price_max !== '' || price_min !== ''
-      }
-    })
+  price_min: yup.string().test({
+    name: 'price-not-allowed',
+    message: 'Giá không phù hợp',
+    test: testPriceMinMax
+  }),
+  price_max: yup.string().test({
+    name: 'price-not-allowed',
+    message: 'Giá không phù hợp',
+    test: testPriceMinMax
+  })
 })
 export const loginSchema = schema.omit(['confirm_password'])
-type LoginSchema = yup.InferType<typeof loginSchema>
 export type Schema = yup.InferType<typeof schema>
