@@ -9,7 +9,6 @@ const InputNumber = forwardRef<HTMLInputElement, Props>(function InputNumberInne
   {
     errorMessage,
     className,
-    name,
     classNameError = 'mt-1 min-h-[1.25rem] text-sm text-red-600',
     classNameInput = 'w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm',
     onChange,
@@ -20,7 +19,7 @@ const InputNumber = forwardRef<HTMLInputElement, Props>(function InputNumberInne
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     if (onChange && (/^\d+$/.test(value) || value === '')) {
-      onChange(event)
+      onChange && onChange(event)
     }
   }
   return (

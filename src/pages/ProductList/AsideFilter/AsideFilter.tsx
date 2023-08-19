@@ -11,6 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { NoUndefinedField } from 'src/types/utils.type'
 import { ObjectSchema } from 'yup'
 import RattingStars from '../RattingStars'
+import { omit } from 'lodash'
 interface Props {
   queryConfig: QueryConfig
   categories: Category[]
@@ -22,9 +23,9 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
   const {
     control,
     handleSubmit,
-    watch,
     trigger,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm<FormData>({
     defaultValues: {
       price_min: '',
@@ -45,6 +46,13 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
       }).toString()
     })
   })
+  const handleRemoveAll = () => {
+    reset()
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(omit(queryConfig, ['price_max', 'price_min', 'category', 'rating_filter'])).toString()
+    })
+  }
   return (
     <div className='py-4'>
       <Link
@@ -130,16 +138,14 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                   <InputNumber
                     type='text'
                     className='grow'
-                    name='from'
                     placeholder='Từ'
                     classNameError='hidden'
                     classNameInput='p-1 w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm'
+                    {...field}
                     onChange={(event) => {
                       field.onChange(event)
                       trigger('price_max')
                     }}
-                    value={field.value}
-                    ref={field.ref}
                   />
                 )
               }}
@@ -177,9 +183,12 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
       </div>
       <div className='my-4 h-[1px] bg-gray-300' />
       <div className='text-sm'>Đánh giá</div>
-      <RattingStars/>
+      <RattingStars queryConfig={queryConfig} />
       <div className='my-4 h-[1px] bg-gray-300'></div>
-      <Button className='hover:bg-orange:80 flex w-full items-center justify-center bg-orange p-2 text-sm uppercase text-white'>
+      <Button
+        onClick={() => handleRemoveAll()}
+        className='hover:bg-orange:80 flex w-full items-center justify-center bg-orange p-2 text-sm uppercase text-white'
+      >
         Xóa tất cả
       </Button>
     </div>
