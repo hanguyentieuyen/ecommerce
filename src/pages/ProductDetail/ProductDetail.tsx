@@ -24,7 +24,7 @@ export default function ProductDetail() {
                   className='absolute left-0 top-0 h-full w-full bg-white object-cover'
                 />
               </div>
-              <div className='grid-ccols-5 relative mt-4 grid gap-1'>
+              <div className='relative mt-4 grid grid-cols-5 gap-1'>
                 <button className='absolute left-0 top-1/2 z-10 h-9 w-5 translate-y-1/2 bg-black text-white'>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -35,6 +35,31 @@ export default function ProductDetail() {
                     className='h-5 w-5'
                   >
                     <path strokeLinecap='round' strokeLinejoin='round' d='M15.75 19.5L8.25 12l7.5-7.5' />
+                  </svg>
+                </button>
+                {product.images.slice(0, 5).map((img, index) => {
+                  const isActive = index === 0
+                  return (
+                    <div className='relative w-full pt-[100%]' key={index}>
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className='absolute top-0 h-full w-full cursor-pointer bg-white object-cover'
+                      />
+                      {isActive && <div className='absolute inset-0 border-2 border-orange' />}
+                    </div>
+                  )
+                })}
+                <button className='absolute right-0 top-1/2 z-10 h-9 w-5 translate-y-1/2 bg-black text-white'>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    strokeWidth={1.5}
+                    stroke='currentColor'
+                    className='h-5 w-5'
+                  >
+                    <path strokeLinecap='round' strokeLinejoin='round' d='M8.25 4.5l7.5 7.5-7.5 7.5' />
                   </svg>
                 </button>
               </div>
