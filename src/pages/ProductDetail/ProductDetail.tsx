@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import productApi from 'src/apis/product.api'
+import ProductRating from 'src/components/ProductRating'
+import { formatCurrency, formatNumberToSocialStyle } from 'src/utils/utils'
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -64,7 +66,28 @@ export default function ProductDetail() {
                 </button>
               </div>
             </div>
-            <div className='col-span-12'></div>
+            <div className='col-span-7'>
+              <h1 className='uppcase text-xl font-medium'>{product.name}</h1>
+              <div className='mt-8 flex items-center'>
+                <div className='flex items-center'>
+                  <span className='mr-1 border-b border-b-orange text-orange'>{product.rating}</span>
+                  <ProductRating
+                    rating={product.rating}
+                    activeClassname='fill-orange text-orange w-4 h-4'
+                    nonActiveClassname='fill-gray-300 text-gray w-4 h-4'
+                  />
+                </div>
+                <div className='mx-4 h-4 w-[1px] bg-gray-300'></div>
+                <div>
+                  <span>{formatNumberToSocialStyle(product.sold)}</span>
+                  <span>Đã bán</span>
+                </div>
+              </div>
+              <div className='px mt-8 flex items-center bg-gray-50 py-4'>
+                <div className='text-gray-500 line-through'>₫{formatCurrency(product.price_before_discount)}</div>
+                <div className='ml-3 text-3xl font-medium text-orange'>₫{formatCurrency(product.price)}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
