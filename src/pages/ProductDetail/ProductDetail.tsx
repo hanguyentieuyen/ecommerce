@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import productApi from 'src/apis/product.api'
+import InputNumber from 'src/components/InputNumber'
 import ProductRating from 'src/components/ProductRating'
-import { formatCurrency, formatNumberToSocialStyle } from 'src/utils/utils'
+import { formatCurrency, formatNumberToSocialStyle, rateSale } from 'src/utils/utils'
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -86,6 +87,44 @@ export default function ProductDetail() {
               <div className='px mt-8 flex items-center bg-gray-50 py-4'>
                 <div className='text-gray-500 line-through'>₫{formatCurrency(product.price_before_discount)}</div>
                 <div className='ml-3 text-3xl font-medium text-orange'>₫{formatCurrency(product.price)}</div>
+                <div className='ml-4 rounded-sm bg-orange px-1 py-[2px] text-xs font-semibold uppercase text-white'>
+                  {rateSale(product.price_before_discount, product.price)} giảm
+                </div>
+              </div>
+              <div className='mt-8 flex items-center'>
+                <div className='capitalize text-gray-500'>Số lượng</div>
+                <div className='ml-10 flex items-center'>
+                  <button className='flex h-8 w-8 items-center justify-center rounded-l-sm border border-gray-300 text-gray-600'>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      strokeWidth={1.5}
+                      stroke='currentColor'
+                      className='h-4 w-4'
+                    >
+                      <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 12h-15' />
+                    </svg>
+                  </button>
+                  <InputNumber
+                    value={1}
+                    className=''
+                    classNameError='hidden'
+                    classNameInput='h-8 w-14 border-t border-b border-gray-300 p-1 text-center outline-none'
+                  />
+                  <button className='flex h-8 w-8 items-center justify-center rounded-l-sm border border-gray-300 text-gray-600'>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      strokeWidth={1.5}
+                      stroke='currentColor'
+                      className='h-4 w-4'
+                    >
+                      <path strokeLinecap='round' strokeLinejoin='round' d='M12 4.5v15m7.5-7.5h-15' />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
