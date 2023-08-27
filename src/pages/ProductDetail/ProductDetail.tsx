@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import DOMPurify from 'dompurify'
 import productApi from 'src/apis/product.api'
 import InputNumber from 'src/components/InputNumber'
 import ProductRating from 'src/components/ProductRating'
@@ -175,6 +176,14 @@ export default function ProductDetail() {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div className='bg-white py-4 shadow'>
+        <div className='container'>
+          <div className='rounded bg-gray-50 p-4 text-lg capitalize text-slate-700'>Mô tả sản phẩm</div>
+          <div className='loading-loose mx-4 mb-4 mt-12 text-sm'>
+            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}></div>
           </div>
         </div>
       </div>
