@@ -46,7 +46,12 @@ export default function ProductDetail() {
     const rect = event.currentTarget.getBoundingClientRect()
     const image = imgRef.current as HTMLImageElement
     const { naturalHeight, naturalWidth } = image
-    const { offsetX, offsetY } = event.nativeEvent
+
+    //C1: Get offsetX, offsetY when handled bubble event, add class pointer-events-none
+    //const { offsetX, offsetY } = event.nativeEvent
+    //C2: Get offsetX, offsetY when not handling bubble event, remove class pointer-events-none
+    const offsetX = event.pageX - (rect.x + window.scrollX)
+    const offsetY = event.pageY - (rect.y + window.scrollY)
     const top = offsetY * (1 - naturalHeight / rect.height)
     const left = offsetX * (1 - naturalWidth / rect.width)
     image.style.width = naturalWidth + 'px'
@@ -73,7 +78,7 @@ export default function ProductDetail() {
                 <img
                   src={activeImage}
                   alt={product.name}
-                  className='object-fit pointer-events-none absolute left-0 top-0 h-full w-full bg-white'
+                  className='object-fit  absolute left-0 top-0 h-full w-full bg-white'
                   ref={imgRef}
                 />
               </div>
