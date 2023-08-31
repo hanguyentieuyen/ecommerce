@@ -43,10 +43,20 @@ export default function ProductDetail() {
     setActiveImage(img)
   }
   const handleZoom = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const rect = event.currentTarget.getBoundingClientRect()
     const image = imgRef.current as HTMLImageElement
     const { naturalHeight, naturalWidth } = image
+    const { offsetX, offsetY } = event.nativeEvent
+    const top = offsetY * (1 - naturalHeight / rect.height)
+    const left = offsetX * (1 - naturalWidth / rect.width)
     image.style.width = naturalWidth + 'px'
     image.style.height = naturalHeight + 'px'
+    image.style.maxWidth = 'unset'
+    image.style.top = top + 'px'
+    image.style.left = left + 'px'
+  }
+  const handleRemoveZoom = () => {
+    imgRef.current?.removeAttribute('style')
   }
   if (!product) return null
   return (
@@ -55,11 +65,15 @@ export default function ProductDetail() {
         <div className='bg-white py-4 shadow'>
           <div className='grid grid-cols-12 gap-9'>
             <div className='col-span-5'>
-              <div className='relative w-full pt-[100%] shadow' onMouseMove={handleZoom}>
+              <div
+                className='relative w-full cursor-zoom-in overflow-hidden pt-[100%] shadow'
+                onMouseMove={handleZoom}
+                onMouseLeave={handleRemoveZoom}
+              >
                 <img
                   src={activeImage}
                   alt={product.name}
-                  className='absolute left-0 top-0 h-full w-full bg-white object-cover'
+                  className='object-fit pointer-events-none absolute left-0 top-0 h-full w-full bg-white'
                   ref={imgRef}
                 />
               </div>
