@@ -4,9 +4,10 @@ import DOMPurify from 'dompurify'
 import productApi from 'src/apis/product.api'
 import InputNumber from 'src/components/InputNumber'
 import ProductRating from 'src/components/ProductRating'
+import Product from '../ProductList/components/Product'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from 'src/utils/utils'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Product } from 'src/types/product.type'
+import { Product as ProductType } from 'src/types/product.type'
 
 export default function ProductDetail() {
   const { nameId } = useParams()
@@ -23,7 +24,15 @@ export default function ProductDetail() {
     () => (product ? product.images.slice(...currentIndexImage) : []),
     [product, currentIndexImage]
   )
-
+  const queryConfig: ProductListConfig = { limit: '20', page: '1', category: product?.category._id }
+  const { data: productsData } = useQuery({
+    queryKey: ['products', queryConfig],
+    queryFn: () => {
+      return productApi.getProducts(queryConfig)
+    },
+    enabled: Boolean(product),
+    staleTime: 3 * 60 * 1000
+  })
   useEffect(() => {
     if (product && product.images.length > 0) {
       setActiveImage(product.images[0])
@@ -31,7 +40,7 @@ export default function ProductDetail() {
   }, [product])
 
   const next = () => {
-    if (currentIndexImage[1] < (product as Product).images.length) {
+    if (currentIndexImage[1] < (product as ProductType).images.length) {
       setCurrentIndexImage((prev) => [prev[0] + 1, prev[1] + 1])
     }
   }
@@ -246,6 +255,20 @@ export default function ProductDetail() {
           <div className='loading-loose mx-4 mb-4 mt-12 text-sm'>
             <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}></div>
           </div>
+        </div>
+      </div>
+      <div className='mt-8'>
+        <div className='container'>
+          <div className='text-white-400 uppercase'>Sản phẩm tương tự</div>
+          {productsData && (
+            <div className='mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+              {productsData.data.data.products.map((product) => (
+                <div className='col-span-1' key={product._id}>
+                  <Product product={product} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
