@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import DOMPurify from 'dompurify'
 import productApi from 'src/apis/product.api'
-import InputNumber from 'src/components/InputNumber'
 import ProductRating from 'src/components/ProductRating'
 import Product from '../ProductList/components/Product'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from 'src/utils/utils'
@@ -11,6 +10,7 @@ import { Product as ProductType } from 'src/types/product.type'
 import QuantityController from 'src/components/QuantityController'
 
 export default function ProductDetail() {
+  const [buyCount, setBuyCount] = useState(1)
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
   const { data: productDetailData } = useQuery({
@@ -73,6 +73,9 @@ export default function ProductDetail() {
   }
   const handleRemoveZoom = () => {
     imgRef.current?.removeAttribute('style')
+  }
+  const handleBuyCount = (value: number) => {
+    setBuyCount(value)
   }
   if (!product) return null
   return (
@@ -165,7 +168,13 @@ export default function ProductDetail() {
               </div>
               <div className='mt-8 flex items-center'>
                 <div className='capitalize text-gray-500'>Số lượng</div>
-                <QuantityController />
+                <QuantityController
+                  onIncrease={handleBuyCount}
+                  onDecrease={handleBuyCount}
+                  onType={handleBuyCount}
+                  value={buyCount}
+                  max={product.quantity}
+                />
                 <div className='ml-6 text-gray-500'>{product.quantity} sản phẩm có sẵn</div>
               </div>
               <div className='mt-8 flex items-center'>
