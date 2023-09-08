@@ -2,7 +2,7 @@ import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import Popover from '../Popover'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import authApi from 'src/apis/auth.api'
 import path from 'src/constant/path'
 import useQueryConfig from 'src/hooks/useQueryConfig'
@@ -10,7 +10,10 @@ import { useForm } from 'react-hook-form'
 import { Schema, schema } from 'src/utils/rule'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { omit } from 'lodash'
-
+import { purchaseStatus } from 'src/constant/purchase'
+import purchaseApi from 'src/apis/purchase.api'
+import noProduct from 'src/assets/img-cart.png'
+import { formatCurrency } from 'src/utils/utils'
 type FormData = Pick<Schema, 'name'>
 const nameSchema = schema.pick(['name'])
 
@@ -31,6 +34,15 @@ export default function Header() {
       setProfile(null)
     }
   })
+  // When direct page product list and product detail, Header components was re-render, not unmount-mouting again.
+  // uery is inactive when component is not subscribe to query => inactive => staleTime (count time to delete)
+  // This query was not inactive => not called => not set staleTime: infinity
+  const { data: purchasesInCartData } = useQuery({
+    queryKey: ['purchase', { status: purchaseStatus.inCart }],
+    queryFn: () => purchaseApi.getPurchases({ status: purchaseStatus.inCart })
+  })
+  const purchasesInCart = purchasesInCartData?.data.data
+  console.log(purchasesInCart)
   const handleLogout = () => {
     logoutMutation.mutate()
   }
@@ -183,68 +195,40 @@ export default function Header() {
             <Popover
               renderPopover={
                 <div className='relative max-w-[400px] rounded-sm border border-gray-200 bg-white text-sm shadow-md'>
-                  <div className='p-2'>
-                    <div className='capitalize text-gray-400'>Sản phẩm mới thêm</div>
-                    <div className='mt-5'>
-                      <div className='mt-4 flex'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            className='h-11 w-11 object-cover'
-                            alt='abc'
-                            src='https://down-vn.img.susercontent.com/file/2c79d1959664965a2f2836e9ed66923b_tn'
-                          />
-                        </div>
-                        <div className='ml-2 flex-grow overflow-hidden'>
-                          <div className='truncate'>
-                            Ốp Lưng XIAOMI REMDI K30 PRO, K30 ULTRA, POCO F2 PRO Ốp kính bóng cao cấp Phi Hành Gia
+                  {purchasesInCart ? (
+                    <div className='p-2'>
+                      <div className='capitalize text-gray-400'>Sản phẩm mới thêm</div>
+                      <div className='mt-5'>
+                        {purchasesInCart.map((purchase) => (
+                          <div className='mt-4 flex' key={purchase._id}>
+                            <div className='flex-shrink-0'>
+                              <img
+                                className='h-11 w-11 object-cover'
+                                alt={purchase.product.name}
+                                src={purchase.product.image}
+                              />
+                            </div>
+                            <div className='ml-2 flex-grow overflow-hidden'>
+                              <div className='truncate'>{purchase.product.name}</div>
+                            </div>
+                            <div className='ml-2 flex-shrink-0'>
+                              <span className='text-orange'>₫{formatCurrency(purchase.price)}</span>
+                            </div>
                           </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫58.650</span>
-                        </div>
+                        ))}
                       </div>
-                      <div className='mt-4 flex'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            className='h-11 w-11 object-cover'
-                            alt='abc'
-                            src='https://down-vn.img.susercontent.com/file/2c79d1959664965a2f2836e9ed66923b_tn'
-                          />
-                        </div>
-                        <div className='ml-2 flex-grow overflow-hidden'>
-                          <div className='truncate'>
-                            Ốp Lưng XIAOMI REMDI K30 PRO, K30 ULTRA, POCO F2 PRO Ốp kính bóng cao cấp Phi Hành Gia
-                          </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫58.650</span>
-                        </div>
-                      </div>
-                      <div className='mt-4 flex'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            className='h-11 w-11 object-cover'
-                            alt='abc'
-                            src='https://down-vn.img.susercontent.com/file/2c79d1959664965a2f2836e9ed66923b_tn'
-                          />
-                        </div>
-                        <div className='ml-2 flex-grow overflow-hidden'>
-                          <div className='truncate'>
-                            Ốp Lưng XIAOMI REMDI K30 PRO, K30 ULTRA, POCO F2 PRO Ốp kính bóng cao cấp Phi Hành Gia
-                          </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫58.650</span>
-                        </div>
+                      <div className='mt-6 flex items-center justify-between'>
+                        <div className='text-xs capitalize'>Thêm vào giỏ hàng</div>
+                        <button className='capitialize rounded-sm bg-orange p-2 text-white hover:bg-opacity-90'>
+                          Xem giỏ hàng
+                        </button>
                       </div>
                     </div>
-                    <div className='mt-6 flex items-center justify-between'>
-                      <div className='text-xs capitalize'>Thêm vào giỏ hàng</div>
-                      <button className='capitialize rounded-sm bg-orange p-2 text-white hover:bg-opacity-90'>
-                        Xem giỏ hàng
-                      </button>
+                  ) : (
+                    <div className='p-2'>
+                      <img src={noProduct} alt='no product' />
                     </div>
-                  </div>
+                  )}
                 </div>
               }
             >
