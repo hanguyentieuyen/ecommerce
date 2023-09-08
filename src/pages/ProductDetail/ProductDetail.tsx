@@ -10,6 +10,7 @@ import { Product as ProductType } from 'src/types/product.type'
 import QuantityController from 'src/components/QuantityController'
 import purchaseApi from 'src/apis/purchase.api'
 import { purchaseStatus } from 'src/constant/purchase'
+import { toast } from 'react-toastify'
 
 export default function ProductDetail() {
   const queryClient = useQueryClient()
@@ -85,7 +86,8 @@ export default function ProductDetail() {
     addToCartMutation.mutate(
       { buy_count: buyCount, product_id: product?._id as string },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
+          toast.success(data.data.message, { autoClose: 3000 })
           queryClient.invalidateQueries(['purchase', { status: purchaseStatus.inCart }])
         }
       }
