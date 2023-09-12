@@ -224,9 +224,12 @@ export default function Header() {
                           {purchasesInCart.length > maxPurchases ? purchasesInCart.length - maxPurchases : ''} Thêm vào
                           giỏ hàng
                         </div>
-                        <button className='capitialize rounded-sm bg-orange p-2 text-white hover:bg-opacity-90'>
+                        <Link
+                          to={path.cart}
+                          className='capitialize rounded-sm bg-orange p-2 text-white hover:bg-opacity-90'
+                        >
                           Xem giỏ hàng
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   ) : (
