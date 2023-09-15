@@ -2,7 +2,7 @@ import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import Popover from '../Popover'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import authApi from 'src/apis/auth.api'
 import path from 'src/constant/path'
 import useQueryConfig from 'src/hooks/useQueryConfig'
@@ -14,7 +14,6 @@ import { purchaseStatus } from 'src/constant/purchase'
 import purchaseApi from 'src/apis/purchase.api'
 import noProduct from 'src/assets/img-cart.png'
 import { formatCurrency } from 'src/utils/utils'
-import { queryClient } from 'src/main'
 type FormData = Pick<Schema, 'name'>
 const nameSchema = schema.pick(['name'])
 const maxPurchases = 5
@@ -28,6 +27,7 @@ export default function Header() {
     resolver: yupResolver(nameSchema)
   })
   const { setIsAuthenticated, isAuthenticated, profile, setProfile } = useContext(AppContext)
+  const queryClient = useQueryClient()
   const logoutMutation = useMutation({
     mutationFn: authApi.logout,
     onSuccess: () => {
