@@ -22,7 +22,7 @@ export default function NavHeader() {
     logoutMutation.mutate()
   }
   return (
-    <div className='flex justify-end'>
+    <div className='container flex justify-end'>
       <Popover
         className='flex cursor-pointer items-center py-1 hover:text-white/70'
         renderPopover={

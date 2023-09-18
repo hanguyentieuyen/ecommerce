@@ -1,33 +1,20 @@
-import { Link, createSearchParams, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Popover from '../Popover'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import { useQuery } from '@tanstack/react-query'
 import path from 'src/constant/path'
-import useQueryConfig from 'src/hooks/useQueryConfig'
-import { useForm } from 'react-hook-form'
-import { Schema, schema } from 'src/utils/rule'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { omit } from 'lodash'
 import { purchaseStatus } from 'src/constant/purchase'
 import purchaseApi from 'src/apis/purchase.api'
 import noProduct from 'src/assets/img-cart.png'
 import { formatCurrency } from 'src/utils/utils'
 import NavHeader from '../NavHeader'
-type FormData = Pick<Schema, 'name'>
-const nameSchema = schema.pick(['name'])
+import useSearchProducts from 'src/hooks/useSearchProducts'
+
 const maxPurchases = 5
 export default function Header() {
-  const navigate = useNavigate()
-  const queryConfig = useQueryConfig()
-  const { register, handleSubmit } = useForm<FormData>({
-    defaultValues: {
-      name: ''
-    },
-    resolver: yupResolver(nameSchema)
-  })
   const { isAuthenticated } = useContext(AppContext)
-
+  const { register, onSubmitSearch } = useSearchProducts()
   // When direct page product list and product detail, Header components was re-render, not unmount-mouting again.
   // uery is inactive when component is not subscribe to query => inactive => staleTime (count time to delete)
   // This query was not inactive => not called => not set staleTime: infinity
@@ -38,24 +25,6 @@ export default function Header() {
   })
   const purchasesInCart = purchasesInCartData?.data.data
 
-  const onSubmitSearch = handleSubmit((data) => {
-    const config = queryConfig.order
-      ? omit(
-          {
-            ...queryConfig,
-            name: data.name
-          },
-          ['order', 'sort_by']
-        )
-      : {
-          ...queryConfig,
-          name: data.name
-        }
-    navigate({
-      pathname: path.home,
-      search: createSearchParams(config).toString()
-    })
-  })
   return (
     <div className='bg-[linear-gradient(-180deg,#f53d2d,#f63)] pb-5 pt-2 text-white'>
       <NavHeader />
