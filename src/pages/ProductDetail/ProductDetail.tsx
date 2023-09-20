@@ -11,6 +11,8 @@ import QuantityController from 'src/components/QuantityController'
 import purchaseApi from 'src/apis/purchase.api'
 import { purchaseStatus } from 'src/constant/purchase'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+import path from 'src/constant/path'
 
 export default function ProductDetail() {
   const queryClient = useQueryClient()
@@ -39,6 +41,7 @@ export default function ProductDetail() {
     staleTime: 3 * 60 * 1000
   })
   const addToCartMutation = useMutation(purchaseApi.addToCart)
+  const navigate = useNavigate()
   useEffect(() => {
     if (product && product.images.length > 0) {
       setActiveImage(product.images[0])
@@ -92,6 +95,15 @@ export default function ProductDetail() {
         }
       }
     )
+  }
+  const buyNow = async () => {
+    const res = await addToCartMutation.mutateAsync({ buy_count: buyCount, product_id: product?._id as string })
+    const purchase = res.data.data
+    navigate(path.cart, {
+      state: {
+        purchaseId: purchase._id
+      }
+    })
   }
   if (!product) return null
   return (
@@ -239,7 +251,10 @@ export default function ProductDetail() {
                   </svg>
                   Thêm vào giỏ hàng
                 </button>
-                <button className='ml-4 flex h-12 items-center justify-center rounded-sm bg-orange px-5 text-white shadow-sm outline-none hover:bg-orange/90'>
+                <button
+                  onClick={buyNow}
+                  className='ml-4 flex h-12 items-center justify-center rounded-sm bg-orange px-5 text-white shadow-sm outline-none hover:bg-orange/90'
+                >
                   Mua ngay
                 </button>
               </div>
