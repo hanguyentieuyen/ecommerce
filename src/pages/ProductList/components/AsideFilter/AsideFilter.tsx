@@ -12,6 +12,7 @@ import { QueryConfig } from 'src/hooks/useQueryConfig'
 import { ObjectSchema } from 'yup'
 import RattingStars from '../RattingStars'
 import { omit } from 'lodash'
+import InputV2 from 'src/components/InputV2'
 interface Props {
   queryConfig: QueryConfig
   categories: Category[]
@@ -140,7 +141,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                     className='grow'
                     placeholder='Từ'
                     classNameError='hidden'
-                    classNameInput='p-1 w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm'
+                    classNameInput='w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm'
                     {...field}
                     onChange={(event) => {
                       field.onChange(event)
@@ -150,7 +151,18 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                 )
               }}
             />
-
+            {/* <InputV2
+              control={control}
+              type='number'
+              name='price_min'
+              className='grow'
+              placeholder='Từ'
+              classNameError='hidden'
+              classNameInput='w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm'
+              onChange={() => {
+                trigger('price_max')
+              }}
+            /> */}
             <div className='mx-2 mt-2 shrink-0'>-</div>
             <Controller
               control={control}
@@ -163,7 +175,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
                     name='to'
                     placeholder='Đến'
                     classNameError='hidden'
-                    classNameInput='p-1 w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm'
+                    classNameInput='w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm'
                     onChange={(event) => {
                       field.onChange(event)
                       trigger('price_max')
