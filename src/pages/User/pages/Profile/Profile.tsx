@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import userApi from 'src/apis/user.api'
@@ -17,6 +17,7 @@ export default function Profile() {
     queryFn: userApi.getProfile
   })
   const profile = profileData?.data.data
+  const updateProfileMutation = useMutation(userApi.updateProfile)
   const {
     register,
     control,
@@ -40,18 +41,19 @@ export default function Profile() {
       setValue('name', profile.name)
       setValue('phone', profile.phone)
       setValue('address', profile.address)
-      setValue('date_of_birth', profile.date_of_birth ? new Date(profile.date_of_birth) : new Date(1990, 0,1))
+      setValue('date_of_birth', profile.date_of_birth ? new Date(profile.date_of_birth) : new Date(1990, 0, 1))
     }
   }, [profile, setValue])
-
-  console.log(profile)
+  const onSubmit = handleSubmit(async (data) => {
+    console.log(data)
+  })
   return (
     <div className='rounded-sm bg-white px-2 pb-10 shadow md:px-7 md:pb-20'>
       <div className='border-b border-b-gray-200 py-6'>
         <h1 className='text-lg font-medium capitalize text-gray-600'>Hồ sơ của tôi</h1>
         <div className='mt-1 text-sm text-gray-700'>Quản lý thông tin hồ sơ để bảo mât tài khoản</div>
       </div>
-      <form className='mt-8 flex flex-col-reverse md:flex-row md:items-start'>
+      <form onSubmit={onSubmit} className='mt-8 flex flex-col-reverse md:flex-row md:items-start'>
         <div className='mt-6 flex-grow pr-12 md:mt-0'>
           <div className='flex flex-col flex-wrap sm:flex-row'>
             <div className='pt-3 capitalize sm:w-[20%] sm:text-right'>Email</div>
@@ -101,7 +103,13 @@ export default function Profile() {
               />
             </div>
           </div>
-          <DateSelect />
+          <Controller
+            control={control}
+            name='date_of_birth'
+            render={({ field }) => (
+              <DateSelect errorMessage={errors.date_of_birth?.message} value={field.value} onChange={field.onChange} />
+            )}
+          />
           <div className='mt-2 flex flex-col flex-wrap sm:flex-row'>
             <div className='truncate pt-3 capitalize sm:w-[20%] sm:text-right'></div>
             <div className='pl-5 sm:w-[80%]'>

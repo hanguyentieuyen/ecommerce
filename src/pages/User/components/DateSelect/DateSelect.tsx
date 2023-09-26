@@ -14,10 +14,12 @@ export default function DateSelect({ value, onChange, errorMessage }: Props) {
     year: value?.getFullYear() || 1990
   })
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value, name } = event.target
+    const { value: valueFromSelect, name } = event.target
     const newDate = {
-      ...date,
-      [name]: value
+      date: value?.getDate() || date.date,
+      month: value?.getMonth() || date.month,
+      year: value?.getFullYear() || date.year,
+      [name]: Number(valueFromSelect)
     }
     setDate(newDate)
     onChange && onChange(new Date(newDate.year, newDate.month, newDate.date))
@@ -67,8 +69,8 @@ export default function DateSelect({ value, onChange, errorMessage }: Props) {
             ))}
           </select>
         </div>
+        <div className='mt-1 min-h-[1.25rem] text-sm text-red-600'>{errorMessage}</div>
       </div>
-      <div className='mt-1 min-h-[1.25rem] text-sm text-red-600'>{errorMessage}</div>
     </div>
   )
 }
