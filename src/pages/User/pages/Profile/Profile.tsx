@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import userApi from 'src/apis/user.api'
 import Button from 'src/components/Button'
@@ -8,11 +8,15 @@ import Input from 'src/components/Input'
 import InputNumber from 'src/components/InputNumber'
 import { UserSchema, userSchema } from 'src/utils/rule'
 import DateSelect from '../../components/DateSelect'
+import { toast } from 'react-toastify'
+import { AppContext } from 'src/contexts/app.context'
+import { setProfileFromLS } from 'src/utils/auth'
 
 type FormData = Pick<UserSchema, 'name' | 'address' | 'phone' | 'date_of_birth' | 'avatar'>
 const profileSchema = userSchema.pick(['name', 'address', 'phone', 'date_of_birth', 'avatar'])
 export default function Profile() {
-  const { data: profileData } = useQuery({
+  const { setProfile } = useContext(AppContext)
+  const { data: profileData, refetch } = useQuery({
     queryKey: ['profile'],
     queryFn: userApi.getProfile
   })
@@ -45,7 +49,11 @@ export default function Profile() {
     }
   }, [profile, setValue])
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data)
+    const res = await updateProfileMutation.mutateAsync({ ...data, date_of_birth: data.date_of_birth?.toISOString() })
+    setProfile(res.data.data)
+    setProfileFromLS(res.data.data)
+    refetch()
+    toast.success(res.data.message)
   })
   return (
     <div className='rounded-sm bg-white px-2 pb-10 shadow md:px-7 md:pb-20'>
@@ -115,7 +123,7 @@ export default function Profile() {
             <div className='pl-5 sm:w-[80%]'>
               <Button
                 type='submit'
-                className='flex h-9 items-center bg-orange px-5 text-center text-sm text-white hover:bg-orange/80'
+                className='flex h-9 items-center rounded-sm bg-orange px-5 text-center text-sm text-white hover:bg-orange/80'
               >
                 Lưu
               </Button>
