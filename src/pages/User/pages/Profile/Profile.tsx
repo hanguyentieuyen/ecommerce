@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import userApi from 'src/apis/user.api'
 import Button from 'src/components/Button'
@@ -15,7 +15,9 @@ import { setProfileFromLS } from 'src/utils/auth'
 type FormData = Pick<UserSchema, 'name' | 'address' | 'phone' | 'date_of_birth' | 'avatar'>
 const profileSchema = userSchema.pick(['name', 'address', 'phone', 'date_of_birth', 'avatar'])
 export default function Profile() {
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const { setProfile } = useContext(AppContext)
+  const [file, setFile] = useState<File>()
   const { data: profileData, refetch } = useQuery({
     queryKey: ['profile'],
     queryFn: userApi.getProfile
@@ -40,6 +42,9 @@ export default function Profile() {
     },
     resolver: yupResolver<FormData>(profileSchema)
   })
+
+  const avatarImage = watch('avatar')
+
   useEffect(() => {
     if (profile) {
       setValue('name', profile.name)
@@ -48,6 +53,7 @@ export default function Profile() {
       setValue('date_of_birth', profile.date_of_birth ? new Date(profile.date_of_birth) : new Date(1990, 0, 1))
     }
   }, [profile, setValue])
+
   const onSubmit = handleSubmit(async (data) => {
     const res = await updateProfileMutation.mutateAsync({ ...data, date_of_birth: data.date_of_birth?.toISOString() })
     setProfile(res.data.data)
@@ -55,6 +61,19 @@ export default function Profile() {
     refetch()
     toast.success(res.data.message)
   })
+
+  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const fileFromLocal = event.target.files?.[0]
+    setFile(fileFromLocal)
+  }
+
+  const handleUploadImage = () => {
+    fileInputRef.current?.click()
+  }
+
+  const previewImage = useMemo(() => {
+    return file ? URL.createObjectURL(file) : ''
+  }, [file])
   return (
     <div className='rounded-sm bg-white px-2 pb-10 shadow md:px-7 md:pb-20'>
       <div className='border-b border-b-gray-200 py-6'>
@@ -133,16 +152,19 @@ export default function Profile() {
         <div className='flex justify-center md:w-72 md:border-l md:border-l-gray-200'>
           <div className='flex flex-col items-center'>
             <div className='my-5 h-24 w-24'>
-              <img
-                className='w-full rounded-full object-cover'
-                src='https://avatars.githubusercontent.com/u/43478102?v=4'
-                alt='avarta'
-              />
+              <img className='h-full w-full rounded-full object-cover' src={previewImage || avatarImage} alt='avatar' />
             </div>
-            <input type='file' className='hidden' accept='.png, .jpg, .jpeg' />
+            <input
+              ref={fileInputRef}
+              onChange={onFileChange}
+              type='file'
+              className='hidden'
+              accept='.png, .jpg, .jpeg'
+            />
             <button
               type='button'
               className='text-gray-60 flex h-10 items-center justify-end rounded-sm border bg-white px-6 text-sm shadow-sm'
+              onClick={handleUploadImage}
             >
               Chọn ảnh
             </button>
