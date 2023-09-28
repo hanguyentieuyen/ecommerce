@@ -13,9 +13,10 @@ import { AppContext } from 'src/contexts/app.context'
 import { setProfileFromLS } from 'src/utils/auth'
 import { getAvatarUrl, isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { ErrorResponseApi } from 'src/types/utils.type'
+import config from 'src/constant/config'
 
 type FormData = Pick<UserSchema, 'name' | 'address' | 'phone' | 'date_of_birth' | 'avatar'>
-type FormDataError = Omit<FormData,'date_of_birth'> & {
+type FormDataError = Omit<FormData, 'date_of_birth'> & {
   date_of_birth?: string
 }
 const profileSchema = userSchema.pick(['name', 'address', 'phone', 'date_of_birth', 'avatar'])
@@ -62,7 +63,6 @@ export default function Profile() {
   }, [profile, setValue])
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data)
     try {
       let avatarName = avatarImage
       if (file) {
@@ -98,7 +98,11 @@ export default function Profile() {
 
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileFromLocal = event.target.files?.[0]
-    setFile(fileFromLocal)
+    if (fileFromLocal && (fileFromLocal.size >= config.maxSizeUploadAvatar || fileFromLocal.type.includes('image'))) {
+      toast.error('Dung lượng file tối đa 1 MB. Định dạng PNG, JPG', { position: 'top-center' })
+    } else {
+      setFile(fileFromLocal)
+    }
   }
 
   const handleUploadImage = () => {
@@ -199,6 +203,10 @@ export default function Profile() {
               type='file'
               className='hidden'
               accept='.png, .jpg, .jpeg'
+              onClick={(event) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                ;(event.target as any).value = null
+              }}
             />
             <button
               type='button'
@@ -208,7 +216,8 @@ export default function Profile() {
               Chọn ảnh
             </button>
             <div className='mt-3 text-gray-400'>
-              <div>Dung lượng file tối đa 1 MB</div>
+              <div>Dung lượng file tối đa 1 MB </div>
+              <div>Định dạng PNG, JPG</div>
             </div>
           </div>
         </div>
