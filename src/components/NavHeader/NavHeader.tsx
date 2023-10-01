@@ -3,13 +3,13 @@ import Popover from '../Popover'
 import { Link } from 'react-router-dom'
 import { AppContext } from 'src/contexts/app.context'
 import { useContext } from 'react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import authApi from 'src/apis/auth.api'
 import { purchaseStatus } from 'src/constant/purchase'
-import { queryClient } from 'src/main'
-
+import { getAvatarUrl } from 'src/utils/utils'
 export default function NavHeader() {
   const { setIsAuthenticated, isAuthenticated, profile, setProfile } = useContext(AppContext)
+  const queryClient = useQueryClient()
   const logoutMutation = useMutation({
     mutationFn: authApi.logout,
     onSuccess: () => {
@@ -84,11 +84,7 @@ export default function NavHeader() {
           }
         >
           <div className='mr-2 h-6 w-6 flex-shrink-0'>
-            <img
-              src='https://avatars.githubusercontent.com/u/43478102?v=4'
-              alt='avatar'
-              className='w-full rounded-full object-cover'
-            />
+            <img src={getAvatarUrl(profile?.avatar)} alt='avatar' className='w-full rounded-full object-cover' />
           </div>
           <div>{profile?.email}</div>
         </Popover>
