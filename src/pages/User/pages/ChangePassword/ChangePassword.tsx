@@ -63,7 +63,8 @@ export default function ChangePassword() {
             <div className='truncate pt-3 capitalize sm:w-[20%] sm:text-right'>Mật khẩu cũ</div>
             <div className='pl-5 sm:w-[80%]'>
               <Input
-                classNameInput='w-full rounded-sm border border-gray-300 px-3 py-2 outline-none focus:border-gray-500 focus:shadow-sm'
+                classNameInput=' w-full rounded-sm border border-gray-300 px-3 py-2 outline-none focus:border-gray-500 focus:shadow-sm'
+                className='relative'
                 register={register}
                 name='password'
                 type='password'
@@ -76,9 +77,11 @@ export default function ChangePassword() {
             <div className='truncate pt-3 capitalize sm:w-[20%] sm:text-right'>Mật khẩu mới</div>
             <div className='pl-5 sm:w-[80%]'>
               <Input
-                classNameInput='w-full rounded-sm border border-gray-300 px-3 py-2 outline-none focus:border-gray-500 focus:shadow-sm'
+                classNameInput=' w-full rounded-sm border border-gray-300 px-3 py-2 outline-none focus:border-gray-500 focus:shadow-sm'
+                className='relative'
                 register={register}
                 name='new_password'
+                type='password'
                 placehoder='Mật khẩu mới'
                 errorMessage={errors.new_password?.message}
               />
@@ -88,9 +91,11 @@ export default function ChangePassword() {
             <div className='truncate pt-3 capitalize sm:w-[20%] sm:text-right'>Xác nhận mật khẩu</div>
             <div className='pl-5 sm:w-[80%]'>
               <Input
-                classNameInput='w-full rounded-sm border border-gray-300 px-3 py-2 outline-none focus:border-gray-500 focus:shadow-sm'
+                classNameInput=' w-full rounded-sm border border-gray-300 px-3 py-2 outline-none focus:border-gray-500 focus:shadow-sm'
+                className='relative'
                 register={register}
                 name='confirm_password'
+                type='password'
                 placehoder='Xác nhận mật khẩu'
                 errorMessage={errors.confirm_password?.message}
               />
