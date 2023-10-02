@@ -12,7 +12,6 @@ import { QueryConfig } from 'src/hooks/useQueryConfig'
 import { ObjectSchema } from 'yup'
 import RattingStars from '../RattingStars'
 import { omit } from 'lodash'
-import InputV2 from 'src/components/InputV2'
 interface Props {
   queryConfig: QueryConfig
   categories: Category[]

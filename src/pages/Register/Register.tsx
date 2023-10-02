@@ -15,14 +15,12 @@ import Button from 'src/components/Button'
 type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
 const registerSchema = schema.pick(['email', 'password', 'confirm_password'])
 export default function Register() {
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
   const {
     register,
     handleSubmit,
     setError,
-    watch, // re-render
-    getValues, // no trigger re-render
     formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(registerSchema)
@@ -119,7 +117,4 @@ export default function Register() {
       </div>
     </div>
   )
-}
-function setProfile(user: any) {
-  throw new Error('Function not implemented.')
 }
