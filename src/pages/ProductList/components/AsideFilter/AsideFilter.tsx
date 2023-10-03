@@ -11,7 +11,7 @@ import { NoUndefinedField } from 'src/types/utils.type'
 import { QueryConfig } from 'src/hooks/useQueryConfig'
 import { ObjectSchema } from 'yup'
 import RattingStars from '../RattingStars'
-import { omit } from 'lodash'
+import omit from 'lodash/omit'
 interface Props {
   queryConfig: QueryConfig
   categories: Category[]

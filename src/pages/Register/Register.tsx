@@ -2,7 +2,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
-import { omit } from 'lodash'
+// Not support tree-shaking
+//import { omit } from 'lodash'
+
+// Import only function omit
+import omit from 'lodash/omit'
 import { schema, Schema } from 'src/utils/rule'
 import Input from 'src/components/Input'
 import authApi from 'src/apis/auth.api'
