@@ -17,7 +17,7 @@ import UserLayout from './pages/User/layouts/UserLayout'
 //import NotFound from './pages/NotFound'
 
 const Login = lazy(() => import('./pages/Login'))
-const ProductList = lazy(() => import('./pages/Login'))
+const ProductList = lazy(() => import('./pages/ProductList'))
 const Profile = lazy(() => import('./pages/User/pages/Profile'))
 const ProductDetail = lazy(() => import('./pages/ProductDetail'))
 const Cart = lazy(() => import('./pages/Cart'))

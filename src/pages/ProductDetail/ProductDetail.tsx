@@ -13,8 +13,10 @@ import { purchaseStatus } from 'src/constant/purchase'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import path from 'src/constant/path'
+import { useTranslation } from 'react-i18next'
 
 export default function ProductDetail() {
+  const { t } = useTranslation(['product'])
   const queryClient = useQueryClient()
   const [buyCount, setBuyCount] = useState(1)
   const { nameId } = useParams()
@@ -203,7 +205,9 @@ export default function ProductDetail() {
                   value={buyCount}
                   max={product.quantity}
                 />
-                <div className='ml-6 text-gray-500'>{product.quantity} sản phẩm có sẵn</div>
+                <div className='ml-6 text-gray-500'>
+                  {product.quantity} {t('product:available')}
+                </div>
               </div>
               <div className='mt-8 flex items-center'>
                 <button
