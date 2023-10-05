@@ -1,19 +1,25 @@
 import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
 import { toast } from 'react-toastify'
-import { AuthResponse } from 'src/types/auth.type'
-import { clearLS, getAccessTokenFromLS, setAccessTokenToLS, setProfileFromLS } from './auth'
+import { AuthResponse, RefreshTokenResponse } from 'src/types/auth.type'
+import { clearLS, getAccessTokenFromLS, setAccessTokenToLS, setRefreshTokenToLS, setProfileFromLS, getRefreshTokenFromLS } from './auth'
 import path from 'src/constant/path'
 import config from 'src/constant/config'
+import { URL_LOGIN, URL_LOGOUT, URL_REFRESH_TOKEN, URL_REGISTER } from 'src/apis/auth.api'
 class Http {
   instance: AxiosInstance
   private accessToken: string
+  private refreshToken: string
+  private refreshTokenRequest: Promise<string> | null
   constructor() {
     this.accessToken = getAccessTokenFromLS()
+    this.refreshToken = getRefreshTokenFromLS()
     this.instance = axios.create({
       baseURL: config.baseURL,
       timeout: 10000,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'expire-access-token': 10,
+        'expire-refresh-token': 60 * 60
       }
     })
     this.instance.interceptors.request.use(
@@ -31,14 +37,17 @@ class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config
-        if (url === path.login || url === path.register) {
+        if (url === URL_LOGIN || url === URL_REGISTER) {
           const data = response.data as AuthResponse
-          this.accessToken = (response.data as AuthResponse).data?.access_token
+          this.accessToken = data.data.access_token
+          this.refreshToken = data.data.refresh_token
           setAccessTokenToLS(this.accessToken)
+          setRefreshTokenToLS(this.refreshToken)
           setProfileFromLS(data.data.user)
           setAccessTokenToLS(this.accessToken)
-        } else if (url === path.logout) {
+        } else if (url === URL_LOGOUT) {
           this.accessToken = ''
+          this.refreshToken = ''
           clearLS()
         }
         return response
@@ -56,6 +65,11 @@ class Http {
         return Promise.reject(error)
       }
     )
+  }
+  private handleRefreshToken() {
+    this.instance.post<RefreshTokenResponse>(URL_REFRESH_TOKEN, {
+      refresh_token: this.refreshToken
+    })
   }
 }
 const http = new Http().instance
