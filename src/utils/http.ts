@@ -1,7 +1,14 @@
 import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
 import { toast } from 'react-toastify'
 import { AuthResponse, RefreshTokenResponse } from 'src/types/auth.type'
-import { clearLS, getAccessTokenFromLS, setAccessTokenToLS, setRefreshTokenToLS, setProfileFromLS, getRefreshTokenFromLS } from './auth'
+import {
+  clearLS,
+  getAccessTokenFromLS,
+  setAccessTokenToLS,
+  setRefreshTokenToLS,
+  setProfileFromLS,
+  getRefreshTokenFromLS
+} from './auth'
 import path from 'src/constant/path'
 import config from 'src/constant/config'
 import { URL_LOGIN, URL_LOGOUT, URL_REFRESH_TOKEN, URL_REGISTER } from 'src/apis/auth.api'
@@ -67,9 +74,22 @@ class Http {
     )
   }
   private handleRefreshToken() {
-    this.instance.post<RefreshTokenResponse>(URL_REFRESH_TOKEN, {
-      refresh_token: this.refreshToken
-    })
+    this.instance
+      .post<RefreshTokenResponse>(URL_REFRESH_TOKEN, {
+        refresh_token: this.refreshToken
+      })
+      .then((res) => {
+        const { access_token } = res.data.data
+        setAccessTokenToLS(access_token)
+        this.accessToken = access_token
+        return access_token
+      })
+      .catch((err) => {
+        clearLS()
+        this.accessToken = ''
+        this.refreshToken = ''
+        throw err
+      })
   }
 }
 const http = new Http().instance
