@@ -9,7 +9,6 @@ import {
   setProfileFromLS,
   getRefreshTokenFromLS
 } from './auth'
-import path from 'src/constant/path'
 import config from 'src/constant/config'
 import { URL_LOGIN, URL_LOGOUT, URL_REFRESH_TOKEN, URL_REGISTER } from 'src/apis/auth.api'
 class Http {
