@@ -13,7 +13,7 @@ export function isAxiosUnprocessableEntityError<FormError>(error: unknown): erro
 }
 
 export function isAxiosUnauthorizedError<UnauthorizedError>(error: unknown): error is AxiosError<UnauthorizedError> {
-  return isAxiosError(error) && error.response?.status === HttpStatusCode.UnprocessableEntity
+  return isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized
 }
 
 export function isAxiosExpiredTokenError<UnauthorizedError>(error: unknown): error is AxiosError<UnauthorizedError> {

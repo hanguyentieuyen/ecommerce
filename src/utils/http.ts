@@ -79,17 +79,20 @@ class Http {
             // Restrict call 2 times request refresh token
             this.refreshTokenRequest = this.refreshTokenRequest
               ? this.refreshTokenRequest
-              : this.handleRefreshToken().finnaly(() => {
+              : this.handleRefreshToken().finally(() => {
                   // Hold refreshTokenRequest for 10 seconds
                   setTimeout(() => {
                     this.refreshTokenRequest = null
                   }, 10000)
                 })
-            return this.refreshTokenRequest.then((access_token) => {
-              if (config.headers) config.headers.authorization = access_token
-              // call again old request
-              return this.instance({ ...config, headers: { ...config.headers, authorization: access_token } })
-            })
+            return (
+              this.refreshTokenRequest &&
+              this.refreshTokenRequest.then((access_token) => {
+                if (config.headers) config.headers.authorization = access_token
+                // call again old request
+                return this.instance({ ...config, headers: { ...config.headers, authorization: access_token } })
+              })
+            )
           }
           // case toast: wrong token, miss token, refresh token fail
           clearLS()
