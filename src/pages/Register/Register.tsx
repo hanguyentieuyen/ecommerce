@@ -2,7 +2,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
-import { omit } from 'lodash'
+// Not support tree-shaking
+//import { omit } from 'lodash'
+
+// Import only function omit
+import omit from 'lodash/omit'
 import { schema, Schema } from 'src/utils/rule'
 import Input from 'src/components/Input'
 import authApi from 'src/apis/auth.api'
@@ -15,14 +19,12 @@ import Button from 'src/components/Button'
 type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
 const registerSchema = schema.pick(['email', 'password', 'confirm_password'])
 export default function Register() {
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
   const {
     register,
     handleSubmit,
     setError,
-    watch, // re-render
-    getValues, // no trigger re-render
     formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(registerSchema)
@@ -82,6 +84,7 @@ export default function Register() {
               />
               <Input
                 className='mt-2'
+                classNameEye='absolute right-[5px] top-[16px] h-4 w-4 cursor-pointer'
                 name='password'
                 type='password'
                 errorMessage={errors.password?.message}
@@ -91,6 +94,7 @@ export default function Register() {
               />
               <Input
                 className='mt-2'
+                classNameEye='absolute right-[5px] top-[16px] h-4 w-4 cursor-pointer'
                 name='confirm_password'
                 type='password'
                 errorMessage={errors.confirm_password?.message}
@@ -119,7 +123,4 @@ export default function Register() {
       </div>
     </div>
   )
-}
-function setProfile(user: any) {
-  throw new Error('Function not implemented.')
 }
