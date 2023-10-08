@@ -84,6 +84,7 @@ export default function Register() {
               />
               <Input
                 className='mt-2'
+                classNameEye='absolute right-[5px] top-[16px] h-4 w-4 cursor-pointer'
                 name='password'
                 type='password'
                 errorMessage={errors.password?.message}
@@ -93,6 +94,7 @@ export default function Register() {
               />
               <Input
                 className='mt-2'
+                classNameEye='absolute right-[5px] top-[16px] h-4 w-4 cursor-pointer'
                 name='confirm_password'
                 type='password'
                 errorMessage={errors.confirm_password?.message}
