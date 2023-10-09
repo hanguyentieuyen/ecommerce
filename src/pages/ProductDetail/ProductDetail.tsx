@@ -14,7 +14,8 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import path from 'src/constant/path'
 import { useTranslation } from 'react-i18next'
-
+import { Helmet } from 'react-helmet-async'
+import { convert } from 'html-to-text'
 export default function ProductDetail() {
   const { t } = useTranslation(['product'])
   const queryClient = useQueryClient()
@@ -110,6 +111,10 @@ export default function ProductDetail() {
   if (!product) return null
   return (
     <div className='bg-gray-200 py-6'>
+      <Helmet>
+        <title>{product.name}</title>
+        <meta name='description' content={convert(product.description, { limits: { maxInputLength: 130 } })} />
+      </Helmet>
       <div className='container'>
         <div className='bg-white py-4 shadow'>
           <div className='grid grid-cols-12 gap-9'>
