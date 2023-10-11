@@ -7,6 +7,7 @@ import Pagination from 'src/components/Pagination'
 import { ProductListConfig } from 'src/types/product.type'
 import categoriesApi from 'src/apis/category.api'
 import useQueryConfig from 'src/hooks/useQueryConfig'
+import { Helmet } from 'react-helmet-async'
 
 export default function ProductList() {
   const queryConfig = useQueryConfig()
@@ -26,6 +27,10 @@ export default function ProductList() {
   })
   return (
     <div className='bg-gray-200 py-6'>
+      <Helmet>
+        <title>Main page | Shoppe clone</title>
+        <meta name='description' content='Product list on Shoppee Ecommerce' />
+      </Helmet>
       <div className='container'>
         {productsData && (
           <div className='grid grid-cols-12 gap-6'>
