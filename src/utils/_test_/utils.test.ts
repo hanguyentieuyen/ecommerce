@@ -1,6 +1,6 @@
 import { AxiosError, HttpStatusCode } from 'axios'
-import { isAxiosError, isAxiosUnprocessableEntityError } from '../utils'
-import { describe, it, expect } from 'vitest'
+import { demo, isAxiosError, isAxiosUnprocessableEntityError } from '../utils'
+import { describe, it,test, expect } from 'vitest'
 
 // describe dùng mô tả ngữ cảnh hoặc 1 đơn vị test (unit test)
 describe('isAxiosError', () => {
@@ -32,5 +32,12 @@ describe('', () => {
         } as any)
       )
     ).toBe(true)
+  })
+})
+// Test converage branch
+describe('demo', () => {
+  test('demo return 2', () => {
+    // expect(demo(4)).toBe(2)
+    expect(demo(3)).toBe(1)
   })
 })
