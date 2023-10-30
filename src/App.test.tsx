@@ -6,7 +6,7 @@ import matchers from '@testing-library/jest-dom/matchers'
 import App from './App'
 import { BrowserRouter } from 'react-router-dom'
 
-//expect.extend(matchers)
+expect.extend(matchers)
 describe('App', () => {
   test('App render and navigate page', async () => {
     const user = userEvent.setup()
@@ -25,10 +25,10 @@ describe('App', () => {
 
     // Verify chuyển sang trang login
     await user.click(screen.getByText(/Đăng nhập/i))
-    // await waitFor(() => {
-    //   expect(screen.queryByText('Bạn chưa có tài khoản?')).toBeInTheDocument()
-    //   expect(document.querySelector('title')?.textContent).toBe('Đăng nhập | Shopee Clone')
-    // })
+    await waitFor(() => {
+      expect(screen.queryByText('Bạn chưa có tài khoản?')).toBeInTheDocument()
+      expect(document.querySelector('title')?.textContent).toBe('Login | Shopee clone')
+    })
     // console.log render
     screen.debug(document.body.parentElement as HTMLElement, 99999999)
   })
