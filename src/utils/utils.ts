@@ -19,7 +19,7 @@ export function isAxiosUnauthorizedError<UnauthorizedError>(error: unknown): err
 export function isAxiosExpiredTokenError<UnauthorizedError>(error: unknown): error is AxiosError<UnauthorizedError> {
   return (
     isAxiosUnauthorizedError<ErrorResponseApi<{ name: string; message: string }>>(error) &&
-    error.response?.data.data.name === 'EXPIRED_TOKEN'
+    error?.response?.data?.data?.name === 'EXPIRED_TOKEN'
   )
 }
 export function formatCurrency(currency: number) {
@@ -48,3 +48,14 @@ export const getIdFromNameId = (nameId: string) => {
 }
 
 export const getAvatarUrl = (avatarName?: string) => (avatarName ? `${config.baseURL}images/${avatarName}` : userImage)
+
+export const demo = (value: number) => {
+  let result = 0
+  if (value < 10) {
+    result++
+  }
+  if (value % 2 === 0) {
+    result++
+  }
+  return result
+}
