@@ -1,17 +1,12 @@
 import { describe, expect, test } from 'vitest'
-
-import { render, screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import matchers from '@testing-library/jest-dom/matchers'
-import App from './App'
-import { BrowserRouter, MemoryRouter } from 'react-router-dom'
-import { logScreen } from './utils/testUtils'
+import { logScreen, renderWithRouter } from './utils/testUtils'
+import path from './constant/path'
+import { waitFor, screen } from '@testing-library/react'
 
 //expect.extend(matchers)
 describe('App', () => {
   test('App render and navigate page', async () => {
-    const user = userEvent.setup()
-    render(<App />, { wrapper: BrowserRouter })
+    const { user } = renderWithRouter()
     /**
      * waitFor sẽ run callback 1 vài lần
      * cho đến khi hết timeout hoặc expect pass
@@ -21,7 +16,7 @@ describe('App', () => {
 
     // Verify vào đúng trang chủ
     // await waitFor(() => {
-    //   expect(document.querySelector('title')?.textContent).toBe('Main page | Shopee clone')
+    //   expect(document.querySelector('title')?.textContent).toBe('Main pagE | Shopee clone')
     // })
 
     // Verify chuyển sang trang login
@@ -34,14 +29,11 @@ describe('App', () => {
 
   test('Go to not found page', async () => {
     const wrongRoute = '/wrong/route'
-    render(
-      <MemoryRouter initialEntries={[wrongRoute]}>
-        <App />
-      </MemoryRouter>
-    )
-    // await waitFor(() => {
-    // expect(screen.getByText(/Sorry about that! Please visit our hompage to get where you need to go./i)).toBeInTheDocument()
-    // })
+    renderWithRouter({ route: wrongRoute })
+    await logScreen()
+  })
+  test('Go to not register page', async () => {
+    renderWithRouter({ route: path.register })
     await logScreen()
   })
 })
