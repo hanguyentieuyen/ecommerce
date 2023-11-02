@@ -66,7 +66,7 @@ export default function Login() {
                 name='email'
                 type='email'
                 errorMessage={errors.email?.message}
-                placehoder='Email'
+                placeholder='Email'
                 register={register}
               />
               <Input
@@ -75,7 +75,7 @@ export default function Login() {
                 name='password'
                 type='password'
                 errorMessage={errors.password?.message}
-                placehoder='Password'
+                placeholder='Password'
                 register={register}
                 autoComplete='on'
               />
