@@ -2,8 +2,9 @@ import { describe, expect, test } from 'vitest'
 import { logScreen, renderWithRouter } from './utils/testUtils'
 import path from './constant/path'
 import { waitFor, screen } from '@testing-library/react'
+import * as matchers from '@testing-library/jest-dom/matchers'
 
-//expect.extend(matchers)
+expect.extend(matchers)
 describe('App', () => {
   test('App render and navigate page', async () => {
     const { user } = renderWithRouter()
@@ -16,7 +17,7 @@ describe('App', () => {
 
     // Verify vào đúng trang chủ
     // await waitFor(() => {
-    //   expect(document.querySelector('title')?.textContent).toBe('Main pagE | Shopee clone')
+    //   expect(document.querySelector('title')?.textContent).toBe('Main page | Shopee clone')
     // })
 
     // Verify chuyển sang trang login
