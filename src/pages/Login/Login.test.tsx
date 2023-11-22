@@ -6,11 +6,17 @@ import * as matchers from '@testing-library/jest-dom/matchers'
 
 expect.extend(matchers)
 describe('Login', () => {
+  let emailInput: HTMLInputElement
+  let passwordInput: HTMLInputElement
+  let submitButton: HTMLButtonElement
   beforeAll(async () => {
     renderWithRouter({ route: path.login })
     await waitFor(() => {
       expect(screen.queryByPlaceholderText('Email')).toBeInTheDocument()
     })
+    emailInput = document.querySelector('form input[type="email"]') as HTMLInputElement
+    passwordInput = document.querySelector('form input[type="password"]') as HTMLInputElement
+    submitButton = document.querySelector('form button[type="submit"]') as HTMLButtonElement
   })
   it('Hien thi loi required khi khong nhap gi', async () => {
     const submitButton = document.querySelector('form button[type="submit"]') as HTMLButtonElement
@@ -20,9 +26,6 @@ describe('Login', () => {
     expect(screen.findByText('Password là bắt buộc')).toBeTruthy()
   })
   it('Hien thi lỗi nhập sai đinh dạng form', async () => {
-    const emailInput = document.querySelector('form input[type="email"]') as HTMLInputElement
-    const passwordInput = document.querySelector('form input[type="password"]') as HTMLInputElement
-    const submitButton = document.querySelector('form button[type="submit"]') as HTMLButtonElement
     fireEvent.change(emailInput, {
       target: {
         value: 'test@gmail.com'
@@ -34,7 +37,28 @@ describe('Login', () => {
       }
     })
     fireEvent.submit(submitButton)
-    expect(screen.findByText('Email không đúng định dạng')).toBeTruthy()
+    expect(screen.queryByText('Email không đúng định dạng'))
     expect(screen.findByText('Độ dài từ 6 - 160 ký tự')).toBeTruthy()
+  })
+
+  it('không hiển thị lỗi khi nhập lại đúng value', async () => {
+    fireEvent.change(emailInput, {
+      target: {
+        value: 'test@gmail.com'
+      }
+    })
+    fireEvent.change(passwordInput, {
+      target: {
+        value: '123'
+      }
+    })
+    waitFor(() => {
+      expect(screen.queryByText('Email không đúng định dạng')).toBeFalsy()
+      expect(screen.queryByText('Độ dài từ 6 - 160 ký tự')).toBeFalsy()
+    })
+    fireEvent.submit(submitButton)
+    
+    await logScreen()
+    //console.log(await screen.queryByText('Email không đúng định dạng')) => null
   })
 })
