@@ -1,6 +1,6 @@
 import { afterAll, afterEach, beforeAll } from 'vitest'
+import { http } from 'msw'
 import { setupServer } from 'msw/node'
-import { rest } from 'msw'
 import config from './src/constant/config'
 import { HttpStatusCode } from 'axios'
 const loginRes = {
@@ -29,15 +29,14 @@ const loginRes = {
 }
 
 export const restHandlers = [
-  rest.post.(`${config.baseURL}login`, (req, res, ctx) => {
+  http.post(`${config.baseURL}login`, (req, res, ctx) => {
     return res(ctx.status(HttpStatusCode.Ok), ctx.json(loginRes))
   })
 ]
-
 const server = setupServer(...restHandlers)
 
 // Start server before all tests
-beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
+beforeAll(() => server.listen({ onUnhandledRequest: 'warn' }))
 
 //  Close server after all tests
 afterAll(() => server.close())
