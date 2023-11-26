@@ -62,27 +62,27 @@ export default function Login() {
             <form className='rounded bg-white p-10 shadow-sm' onSubmit={onSubmit} noValidate>
               <div className='text-2xl'>Đăng nhập</div>
               <Input
-                className='mt-8'
                 name='email'
+                register={register}
                 type='email'
+                className='mt-8'
                 errorMessage={errors.email?.message}
                 placeholder='Email'
-                register={register}
               />
               <Input
-                className='mt-2'
-                classNameEye='absolute right-[5px] top-[16px] h-4 w-4 cursor-pointer'
                 name='password'
+                register={register}
                 type='password'
+                className='mt-2'
+                classNameEye='absolute right-[5px] h-5 w-5 cursor-pointer top-[12px]'
                 errorMessage={errors.password?.message}
                 placeholder='Password'
-                register={register}
                 autoComplete='on'
               />
               <div className='mt-3'>
                 <Button
                   type='submit'
-                  className='flex w-full items-center justify-center bg-red-500 px-2 py-4 text-center text-sm uppercase text-white hover:bg-red-600'
+                  className='flex  w-full items-center justify-center bg-red-500 py-4 px-2 text-sm uppercase text-white hover:bg-red-600'
                   isLoading={loginMutation.isLoading}
                   disabled={loginMutation.isLoading}
                 >
